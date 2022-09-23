@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Monitoring_line</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/socket.io-client-4.5.0/dist/socket.io.min.js"></script>
+
+</head>
+  <body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 bg-comingsoon border" id="statusk1">
+                <div class="row">
+                    <div class="col-11 text-light">
+                        <h2><%= idline1 %></h2>
+                        <h2><%= part1 %></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 p-0">
+                        <div class="container-fluid p-0">
+                            <img class="img-fluid" src="/assets/img/Coming soon.png" alt="coming soon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 bg-comingsoon border" id="statustake">
+                <div class="row">
+                    <div class="col-11 text-light">
+                        <h2><%= idline2 %></h2>
+                        <h2><%= part2 %></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 p-0">
+                        <div class="container-fluid p-0">
+                            <img class="img-fluid" src="/assets/img/Coming soon.png" alt="coming soon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        <div class="row">
+            <div class="col-12 bg-light text-center " style="margin-top: 20px; font-size: 45px;">
+            <marquee direction="left" height="100%" width="100%" bg-color="white">REALTIME MONITORING - LINE MACHINING &copy;  PE DIGITALIZATION</marquee>
+            </div>
+        </div>
+    </div>
+    
+    <!--- JQUERY -->
+    <script>
+        const resdthour1 = <%- JSON.stringify(resdthour1) %>;
+        const resdthour2 = <%- JSON.stringify(resdthour2) %>;
+        let part1 = "<%= part1 %>"
+        let part2 = "<%= part2 %>"
+        let line1 = "<%= line1 %>"
+        let line2 = "<%= line2 %>"
+    </script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/bs/js/bootstrap.bundle.min.js"></script>
+    <!--- JQUERY-END -->
+</body>
+</html>

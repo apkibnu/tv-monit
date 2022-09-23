@@ -1,0 +1,24 @@
+{
+  "name": "dashboard-tv-monitoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile:sass": "node-sass public/assets/scss/layout/style.scss public/css/style.css -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.2.0",
+    "chart.js": "^2.9.4",
+    "compass-mixins": "^0.12.12",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "jquery": "^3.4.1",
+    "mysql": "^2.18.1",
+    "node-sass": "^7.0.1",
+    "socket.io": "^4.5.2"
+  }
+}

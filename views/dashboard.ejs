@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Monitoring_line</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/socket.io-client-4.5.0/dist/socket.io.min.js"></script>
+
+</head>
+  <body>
+    <div class="container-fluid">
+        <div class="row">
+            <% if (statk1 == 'normal') {%> 
+            <div class="col-6 bg-success border" id="statusk1">
+            <% } else if (statk1 == 'dt') {%>
+            <div class="col-6 bg-danger border" id="statusk1">
+            <% } else { %> 
+            <div class="col-6 bg-warning border" id="statusk1">
+            <% } %> 
+                <div class="row">
+                    <div class="col-11 text-light">
+                        <h2><%= idline1 %></h2>
+                        <h2><%= part1 %></h2>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-12 p-0">
+                        <div class="container-fluid p-0">
+                            <img class="img-fluid" src="assets/img/Coming soon.png" alt="coming soon">
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-11 text-light my-4">
+                        <h4>PERFORMANCE :</h4>
+                    </div>
+                </div>
+                <div class="row text-light">
+                    <div class="col-10 text-end pt-0">
+                        <% if (perck1 < 95) { %>
+                        <h1 class="font-jumlah font-blinking" id="perck1"><%=  perck1 %></h1>
+                        <% } else { %>
+                        <h1 class="font-jumlah" id="perck1"><%=  perck1 %></h1>    
+                        <% } %>    
+                    </div>
+                    <div class="col-2 d-flex align-items-center"><h1>%</h1></div>
+                </div>
+                <div class="row shadow">
+                    <div class="col-7 bg-light text-center">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="text-dark m-1">TOTAL</h4>
+                                <h1 class="text-dark" id="totalk1"><%=  totalk1 %></h1>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-dark m-1">TARGET</h4>
+                                <h1 class="text-dark" id="targetk1"><%=  targetk1 %></h1></div>
+                        </div>
+                        
+                    </div>
+                    <% if (statk1 == 'normal') {%> 
+                        <div class="col-4 bg-normal d-flex align-items-center justify-content-center text-light fw-bold" id="problemk1">
+                            <h3 class="text-center text-break" id="problemdesck1">RUNNING</h3>
+                        </div>
+                    <% } else if (statk1 == 'dt') {%>
+                        <div class="col-4 bg-danger d-flex align-items-center justify-content-center text-light fw-bold" id="problemk1">
+                            <h3 class="text-center text-break" id="problemdesck1"><%= probk1.toUpperCase() %></h3>
+                        </div>
+                    <% } else { %> 
+                        <div class="col-4 bg-warning d-flex align-items-center justify-content-center text-light fw-bold" id="problemk1">
+                            <h3 class="text-center text-break" id="problemdesck1"><%= probk1.toUpperCase() %></h3>
+                        </div>
+                    <% } %> 
+                    <div class="col-1 bg-light"></div>
+                </div>
+                <div class="row text-light mt-5">
+                    <div class="col-4 d-flex justify-content-center">
+                        <h4 class="my-2">AVAILABILITY</h4>
+                    </div>
+                    <div class="col-8">
+                        <div class="progress mb-2 border h-100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated fs-4 fw-bold" role="progressbar" aria-label="Example with label" style="width: <%= avak1*100 %>%;" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100" id="avak1"><%= avak1*100 %>%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-light my-5">
+                    <div class="col-4 d-flex justify-content-center">
+                        <h4 class="my-2">QUALITY RATE</h4>
+                    </div>
+                    <div class="col-8">
+                        <div class="progress border h-100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated fs-4 fw-bold" role="progressbar" aria-label="Example with label" style="width: <%= quak1*100 %>%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="quak1"><%= quak1*100 %>%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <% if (shift == 1) { %>
+                        <div class="row text-light" id="shift-1" >
+                            <div class="col-4 d-flex align-items-center justify-content-center">
+                                <h4>Shift 1</h4>
+                            </div>
+                            <div class="col-8">
+                                <div class="row ms-1 mb-2"> 
+                                    <div class="col-1 bg-success text-center border border-light" id="1-0">
+                                        <p style="margin-top: 10px;">00</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-1">
+                                        <p style="margin-top: 10px;">01</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-2">
+                                        <p style="margin-top: 10px;">02</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-3">
+                                        <p style="margin-top: 10px;">03</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-4">
+                                        <p style="margin-top: 10px;">04</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-5">
+                                        <p style="margin-top: 10px;">05</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-6">
+                                        <p style="margin-top: 10px;">06</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } else if (shift == 2) {  %>
+                        <div class="row text-light" id="shift-2">
+                            <div class="col-4 d-flex align-items-center justify-content-center">
+                                <h4>Shift 2</h4>
+                            </div>
+                            <div class="col-8">
+                                <div class="row ms-1 mb-2">
+                                    <div class="col-1 bg-success text-center border border-light" id="1-7">
+                                        <p style="margin-top: 10px;">07</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-8">
+                                        <p style="margin-top: 10px;">08</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-9">
+                                        <p style="margin-top: 10px;">09</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-10">
+                                        <p style="margin-top: 10px;">10</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-11">
+                                        <p style="margin-top: 10px;">11</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-12">
+                                        <p style="margin-top: 10px;">12</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-13">
+                                        <p style="margin-top: 10px;">13</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-14">
+                                        <p style="margin-top: 10px;">14</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-15">
+                                        <p style="margin-top: 10px;">15</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } else if (shift == 3) { %>
+                        <div class="row text-light" id="shift-3" style="display: none;">
+                            <div class="col-4 d-flex align-items-center justify-content-center">
+                                <h4>Shift 3</h4>
+                            </div>
+                            <div class="col-8">
+                                <div class="row ms-1 mb-2">
+                                    <div class="col-1 bg-success text-center border border-light" id="1-16">
+                                        <p style="margin-top: 10px;">16</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-17">
+                                        <p style="margin-top: 10px;">17</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-18">
+                                        <p style="margin-top: 10px;">18</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-19">
+                                        <p style="margin-top: 10px;">19</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-20">
+                                        <p style="margin-top: 10px;">20</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-21">
+                                        <p style="margin-top: 10px;">21</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-22">
+                                        <p style="margin-top: 10px;">22</p>
+                                    </div>
+                                    <div class="col-1 bg-success text-center border border-light" id="1-23">
+                                        <p style="margin-top: 10px;">23</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+
+            <% if (stattake == 'normal') {%> 
+            <div class="col-6 bg-success border" id="statustake">
+            <% } else if (stattake == 'dt') {%>
+            <div class="col-6 bg-danger border" id="statustake">
+            <% } else { %> 
+            <div class="col-6 bg-warning border" id="statustake">
+            <% } %>
+                <div class="row">
+                    <div class="col-12 text-light">
+                        <h2><%= idline2 %></h2>
+                        <h2><%= part2 %></h2>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-12 p-0">
+                        <div class="container-fluid p-0">
+                            <img class="img-fluid" src="assets/img/Coming soon.png" alt="coming soon">
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-11 text-light my-4">
+                        <h4>PERFORMANCE :</h4>
+                    </div>
+                </div>
+                <div class="row text-light">
+                    <div class="col-10 text-end pt-0">
+                        <% if (perctake < 95) { %>
+                        <h1 class="font-jumlah font-blinking" id="perctake"><%=  perctake %></h1>
+                        <% } else { %>
+                        <h1 class="font-jumlah" id="perctake"><%=  perctake %></h1>    
+                        <% } %> 
+                    </div>
+                    <div class="col-2 d-flex align-items-center"><h1>%</h1></div>
+                </div>
+                <div class="row shadow">
+                    <div class="col-7 bg-light text-center">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="text-dark m-1" >TOTAL</h4>
+                                <h1 class="text-dark" id="totaltake"><%=  totaltake %></h1>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-dark m-1">TARGET</h4>
+                                <h1 class="text-dark" id="targettake"><%=  targettake %></h1></div>
+                        </div>
+                        
+                    </div>
+                    <% if (stattake == 'normal') {%> 
+                        <div class="col-4 bg-normal d-flex align-items-center justify-content-center text-light fw-bold" id="problemtake">
+                            <h3 class="text-center text-break" id="problemdesctake">RUNNING</h3>
+                        </div>
+                    <% } else if (stattake == 'dt') {%>
+                        <div class="col-4 bg-danger d-flex align-items-center justify-content-center text-light fw-bold" id="problemtake">
+                            <h3 class="text-center text-break" id="problemdesctake"><%= probtake.toUpperCase() %></h3>
+                        </div>
+                    <% } else { %> 
+                        <div class="col-4 bg-warning d-flex align-items-center justify-content-center text-light fw-bold" id="problemtake">
+                            <h3 class="text-center text-break" id="problemdesctake"><%= probtake.toUpperCase() %></h3>
+                        </div>
+                    <% } %> 
+                    <div class="col-1 bg-light"></div>
+                </div>
+                <div class="row text-light mt-5">
+                    <div class="col-4 d-flex justify-content-center">
+                        <h4 class="my-2">AVAILABILITY</h4>
+                    </div>
+                    <div class="col-8">
+                                <div class="progress mb-2 border h-100">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated fs-4 fw-bold" role="progressbar" aria-label="Example with label" style="width: <%= avatake*100 %>%;" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100" id="avatake"><%= avatake*100 %>%</div>
+                                </div>
+                    </div>
+                </div>
+                <div class="row text-light my-5">
+                    <div class="col-4 d-flex justify-content-center">
+                        <h4 class="my-2">QUALITY RATE</h4>
+                    </div>
+                    <div class="col-8">
+                        <div class="progress border h-100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated fs-4 fw-bold" role="progressbar" aria-label="Example with label" style="width: <%= quatake*100 %>%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="quatake"><%= quatake*100 %>%</div>
+                        </div>
+                    </div>
+                </div>
+                    <% if (shift == 1) { %>
+                    <div class="row text-light" id="shift-1" >
+                        <div class="col-4 d-flex align-items-center justify-content-center">
+                            <h4>Shift 1</h4>
+                        </div>
+                        <div class="col-8">
+                            <div class="row ms-1 mb-2"> 
+                                <div class="col-1 bg-success text-center border border-light" id="2-0">
+                                    <p style="margin-top: 10px;">00</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-1">
+                                    <p style="margin-top: 10px;">01</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-2">
+                                    <p style="margin-top: 10px;">02</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-3">
+                                    <p style="margin-top: 10px;">03</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-4">
+                                    <p style="margin-top: 10px;">04</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-5">
+                                    <p style="margin-top: 10px;">05</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-6">
+                                    <p style="margin-top: 10px;">06</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else if (shift == 2) {  %>
+                    <div class="row text-light" id="shift-2">
+                        <div class="col-4 d-flex align-items-center justify-content-center">
+                            <h4>Shift 2</h4>
+                        </div>
+                        <div class="col-8">
+                            <div class="row ms-1 mb-2">
+                                <div class="col-1 bg-success text-center border border-light" id="2-7">
+                                    <p style="margin-top: 10px;">07</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-8">
+                                    <p style="margin-top: 10px;">08</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-9">
+                                    <p style="margin-top: 10px;">09</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-10">
+                                    <p style="margin-top: 10px;">10</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-11">
+                                    <p style="margin-top: 10px;">11</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-12">
+                                    <p style="margin-top: 10px;">12</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-13">
+                                    <p style="margin-top: 10px;">13</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-14">
+                                    <p style="margin-top: 10px;">14</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-15">
+                                    <p style="margin-top: 10px;">15</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else if (shift == 3) { %>
+                    <div class="row text-light" id="shift-3" style="display: none;">
+                        <div class="col-4 d-flex align-items-center justify-content-center">
+                            <h4>Shift 3</h4>
+                        </div>
+                        <div class="col-8">
+                            <div class="row ms-1 mb-2">
+                                <div class="col-1 bg-success text-center border border-light" id="2-16">
+                                    <p style="margin-top: 10px;">16</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-17">
+                                    <p style="margin-top: 10px;">17</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-18">
+                                    <p style="margin-top: 10px;">18</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-19">
+                                    <p style="margin-top: 10px;">19</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-20">
+                                    <p style="margin-top: 10px;">20</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-21">
+                                    <p style="margin-top: 10px;">21</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-22">
+                                    <p style="margin-top: 10px;">22</p>
+                                </div>
+                                <div class="col-1 bg-success text-center border border-light" id="2-23">
+                                    <p style="margin-top: 10px;">23</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        
+        </div>
+        <div class="row">
+            <div class="col-12 bg-light text-center " style="margin-top: 20px; font-size: 45px;">
+            <marquee direction="left" height="100%" width="100%" bg-color="white">REALTIME MONITORING - LINE MACHINING &copy;  PE DIGITALIZATION</marquee>
+            </div>
+        </div>
+    </div>
+    
+    <!--- JQUERY -->
+    <script>
+        const resdthour1 = <%- JSON.stringify(resdthour1) %>;
+        const resdthour2 = <%- JSON.stringify(resdthour2) %>;
+        let part1 = "<%= part1 %>"
+        let part2 = "<%= part2 %>"
+        let line1 = "<%= line1 %>"
+        let line2 = "<%= line2 %>"
+        let st = "<%= statk1 %>"
+        let totalk1 = <%= totalk1 %>
+    </script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/bs/js/bootstrap.bundle.min.js"></script>
+    <!--- JQUERY-END -->
+</body>
+</html>
