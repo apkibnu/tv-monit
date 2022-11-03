@@ -92,11 +92,15 @@ io.on('connection',(socket)=> {
         interval= setInterval(()=>{
             let probk1;
             let probtake;
+            let statk1;
+            let stattake;
             updateshift();
             conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = ? and line = ? and tanggal = curdate() and shift = ?", [part1, line1, shift], (err, resk1) => {
                 conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = ? and line = ? and tanggal = curdate() and shift = ?", [part2, line2, shift], (err, restake) => {
                     conTicket.query("select status from tb_line where nama_part = ? and nama_line = ?", [part1, line1], (err, resstat1) => {
+                        statk1 = resstat1[0].status
                         conTicket.query("select status from tb_line where nama_part = ? and nama_line = ?", [part2, line2], (err, resstat2) => {
+                            stattake = resstat2[0].status
                             conTicket.query("select problem from ticket where nama_part = ? and lane = ? and tanggal = curdate() ORDER BY ticketid desc", [part1, line1], (err, resprobk1)=>{ 
                                 if(resprobk1.length == 0) {
                                     probk1 = ''
@@ -116,7 +120,7 @@ io.on('connection',(socket)=> {
                                                     let perck1 = (resk1[0].total/resk1[0].target*100 || 0).toFixed(1)
                                                     let perctake = (restake[0].total/restake[0].target*100 || 0).toFixed(1)
                                                     socket.emit('update-performance',resk1[0].total,resk1[0].target,perck1,restake[0].total,restake[0].target,perctake)
-                                                    socket.emit('update-status', resstat1[0].status, resstat2[0].status, probk1, probtake)
+                                                    socket.emit('update-status', statk1, stattake, probk1, probtake)
                                                     socket.emit('update-available', resk1new[0].ava || 0, resk1new[0].qua || 0, restakenew[0].ava || 0, restakenew[0].qua || 0) 
                                                     for (let i = 0; i < resdthour1.length; i++) {
                                                         socket.emit('update-dt-hourly1', resdthour1[i].jam, resdthour1[i].dt, shift)
@@ -141,64 +145,6 @@ io.on('connection',(socket)=> {
     })
 })
 
-app.get('/', (req, res) => {
-    updateshift()
-    let probk1;
-    let probtake;
-    conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = 'COVER L SIDE K1ZG (SFG)' and line = 'LINE 95' and tanggal = curdate() and shift = ?", [shift], (err, resk1) => {
-        conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = 'MANIFOLD INTAKE 715B (FG)' and line = 'LINE 96' and tanggal = curdate() and shift = ?", [shift], (err, restake) => {
-            conTicket.query("select status from tb_line where nama_part = 'COVER L SIDE K1ZG (SFG)' and nama_line = 'LINE 95'", (err, resstat1) => {
-                conTicket.query("select status from tb_line where nama_part = 'MANIFOLD INTAKE 715B (FG)' and nama_line = 'LINE 96'", (err, resstat2) => {
-                    conTicket.query("select problem from ticket where nama_part = 'COVER L SIDE K1ZG (SFG)' and lane = 'LINE 95' and tanggal = curdate() ORDER BY ticketid desc", (err, resprobk1)=>{ 
-                        if(resprobk1.length == 0) {
-                            probk1 = ''
-                        } else {
-                            probk1 = resprobk1[0].problem
-                        }
-                        conTicket.query("select problem from ticket where nama_part = 'MANIFOLD INTAKE 715B (FG)' and lane = 'LINE 96' and tanggal = curdate() ORDER BY ticketid desc", (err, resprobtake)=>{
-                            if(resprobtake.length == 0) {
-                                probtake = ''
-                            } else {
-                                probtake = resprobtake[0].problem
-                            }
-                            conLocal.query("select ava , qua from tb_produksi where nama_part = 'COVER L SIDE K1ZG (SFG)' and line = 'LINE 95' and tanggal = curdate() and shift = ? ",[shift], (err, resk1new) => {
-                                conLocal.query("select sum(ava) as ava , sum(qua) as qua from tb_produksi where nama_part = 'MANIFOLD INTAKE 715B (FG)' and line = 'LINE 96' and tanggal = curdate() and shift = ? ", [shift], (err, restakenew) => {
-                                    conLocal.query("SELECT jam, (TIME_TO_SEC(dt_auto)+TIME_TO_SEC(DT_MATERIAL)+TIME_TO_SEC(DT_MESIN)+TIME_TO_SEC(DT_OTHERS)+TIME_TO_SEC(DT_PROSES)+TIME_TO_SEC(DT_TERPLANNING)) AS dt FROM tb_data_hourly WHERE nama_part = 'COVER L SIDE K1ZG (SFG)' AND line = 'LINE 95' AND shift = ?", [shift], (err, resdthour1) => {
-                                        conLocal.query("SELECT jam, (TIME_TO_SEC(dt_auto)+TIME_TO_SEC(DT_MATERIAL)+TIME_TO_SEC(DT_MESIN)+TIME_TO_SEC(DT_OTHERS)+TIME_TO_SEC(DT_PROSES)+TIME_TO_SEC(DT_TERPLANNING)) AS dt FROM tb_data_hourly WHERE nama_part = 'MANIFOLD INTAKE 715B (FG)' AND line = 'LINE 96' AND shift = ?", [shift], (err, resdthour2) => {
-                                            data = {
-                                                line: "LINE 96",
-                                                part: "MANIFOLD INTAKE 715B (FG)",
-                                                totalk1: resk1[0].total || 0,
-                                                targetk1: resk1[0].target || 0,
-                                                perck1: (resk1[0].total/resk1[0].target*100 || 0).toFixed(1),
-                                                avak1: (resk1new[0].ava || 0).toFixed(2),
-                                                quak1: (resk1new[0].qua || 0).toFixed(2),
-                                                totaltake: restake[0].total || 0,
-                                                targettake: restake[0].target || 0,
-                                                perctake: (restake[0].total/restake[0].target*100 || 0).toFixed(1), 
-                                                statk1: resstat1[0].status,
-                                                stattake: resstat2[0].status,                                    
-                                                avatake: (restakenew[0].ava || 0).toFixed(2),
-                                                quatake: (restakenew[0].qua || 0).toFixed(2),
-                                                probk1: probk1,
-                                                probtake: probtake,
-                                                shift: shift,
-                                                resdthour1,
-                                                resdthour2
-                                            }
-                                            res.render('dashboard', data)  
-                                        })
-                                    })                              
-                                })
-                            })
-                        })
-                    })                
-                })
-            })
-        })
-    })
-})
-
 app.get('/:idpart1/:idpart2', (req, res) => {
     updateshift()
     let probk1;
@@ -213,7 +159,7 @@ app.get('/:idpart1/:idpart2', (req, res) => {
             line1 = respart1[0].nama_line
             part2 = respart2[0].nama_part
             line2 = respart2[0].nama_line
-            conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = ? and line = ? and tanggal = curdate() and shift = ?", [part1, line1, shift], (err, resk1) => {
+            conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = ? and line = ? and tanggal = curdate() and shift = ?", [part1, line1, shift], (err, resk1) => {  
                 conLocal.query("select sum(target) as target, sum(total_produksi) as total from tb_produksi where nama_part = ? and line = ? and tanggal = curdate() and shift = ?", [part2, line2, shift], (err, restake) => {
                     conTicket.query("select status from tb_line where nama_part = ? and nama_line = ?", [part1, line1], (err, resstat1) => {
                         conTicket.query("select status from tb_line where nama_part = ? and nama_line = ?", [part2, line2], (err, resstat2) => {
@@ -233,115 +179,34 @@ app.get('/:idpart1/:idpart2', (req, res) => {
                                         conLocal.query("select sum(ava) as ava , sum(qua) as qua from tb_produksi where nama_part = ? and line = ? and tanggal = curdate() and shift = ? ", [part2, line2, shift], (err, restakenew) => {
                                             conLocal.query("SELECT jam, (TIME_TO_SEC(dt_auto)+TIME_TO_SEC(DT_MATERIAL)+TIME_TO_SEC(DT_MESIN)+TIME_TO_SEC(DT_OTHERS)+TIME_TO_SEC(DT_PROSES)+TIME_TO_SEC(DT_TERPLANNING)) AS dt FROM tb_data_hourly WHERE nama_part = ? AND line = ? AND shift = ?", [part1, line1, shift], (err, resdthour1) => {
                                                 conLocal.query("SELECT jam, (TIME_TO_SEC(dt_auto)+TIME_TO_SEC(DT_MATERIAL)+TIME_TO_SEC(DT_MESIN)+TIME_TO_SEC(DT_OTHERS)+TIME_TO_SEC(DT_PROSES)+TIME_TO_SEC(DT_TERPLANNING)) AS dt FROM tb_data_hourly WHERE nama_part = ? AND line = ? AND shift = ?", [part2, line2, shift], (err, resdthour2) => {
-                                                    if (respart1[0].status == 1 && respart2[0].status == 1) {
-                                                        data = {
-                                                            line1,
-                                                            part1,
-                                                            line2,
-                                                            part2,
-                                                            idline1: respart1[0].id_lane,
-                                                            idline2: respart2[0].id_lane,
-                                                            totalk1: resk1[0].total || 0,
-                                                            targetk1: resk1[0].target || 0,
-                                                            perck1: (resk1[0].total/resk1[0].target*100 || 0).toFixed(1),
-                                                            avak1: (resk1new[0].ava || 0).toFixed(2),
-                                                            quak1: (resk1new[0].qua || 0).toFixed(2),
-                                                            totaltake: restake[0].total || 0,
-                                                            targettake: restake[0].target || 0,
-                                                            perctake: (restake[0].total/restake[0].target*100 || 0).toFixed(1), 
-                                                            statk1: resstat1[0].status,
-                                                            stattake: resstat2[0].status,                                    
-                                                            avatake: (restakenew[0].ava || 0).toFixed(2),
-                                                            quatake: (restakenew[0].qua || 0).toFixed(2),
-                                                            probk1: probk1,
-                                                            probtake: probtake,
-                                                            shift: shift,
-                                                            resdthour1,
-                                                            resdthour2
-                                                        }
-                                                        res.render('dashboard', data)
-                                                    } else if (respart1[0].status == 0 && respart2[0].status == 1) {
-                                                        data = {
-                                                            line1,
-                                                            part1,
-                                                            line2,
-                                                            part2,
-                                                            idline1: respart1[0].id_lane,
-                                                            idline2: respart2[0].id_lane,
-                                                            totalk1: resk1[0].total || 0,
-                                                            targetk1: resk1[0].target || 0,
-                                                            perck1: (resk1[0].total/resk1[0].target*100 || 0).toFixed(1),
-                                                            avak1: (resk1new[0].ava || 0).toFixed(2),
-                                                            quak1: (resk1new[0].qua || 0).toFixed(2),
-                                                            totaltake: restake[0].total || 0,
-                                                            targettake: restake[0].target || 0,
-                                                            perctake: (restake[0].total/restake[0].target*100 || 0).toFixed(1), 
-                                                            statk1: resstat1[0].status,
-                                                            stattake: resstat2[0].status,                                    
-                                                            avatake: (restakenew[0].ava || 0).toFixed(2),
-                                                            quatake: (restakenew[0].qua || 0).toFixed(2),
-                                                            probk1: probk1,
-                                                            probtake: probtake,
-                                                            shift: shift,
-                                                            resdthour1,
-                                                            resdthour2
-                                                        }
-                                                        res.render('dashboard_cs_left', data)
-                                                    } else if (respart1[0].status == 1 && respart2[0].status == 0) {
-                                                        data = {
-                                                            line1,
-                                                            part1,
-                                                            line2,
-                                                            part2,
-                                                            idline1: respart1[0].id_lane,
-                                                            idline2: respart2[0].id_lane,
-                                                            totalk1: resk1[0].total || 0,
-                                                            targetk1: resk1[0].target || 0,
-                                                            perck1: (resk1[0].total/resk1[0].target*100 || 0).toFixed(1),
-                                                            avak1: (resk1new[0].ava || 0).toFixed(2),
-                                                            quak1: (resk1new[0].qua || 0).toFixed(2),
-                                                            totaltake: restake[0].total || 0,
-                                                            targettake: restake[0].target || 0,
-                                                            perctake: (restake[0].total/restake[0].target*100 || 0).toFixed(1), 
-                                                            statk1: resstat1[0].status,
-                                                            stattake: resstat2[0].status,                                    
-                                                            avatake: (restakenew[0].ava || 0).toFixed(2),
-                                                            quatake: (restakenew[0].qua || 0).toFixed(2),
-                                                            probk1: probk1,
-                                                            probtake: probtake,
-                                                            shift: shift,
-                                                            resdthour1,
-                                                            resdthour2
-                                                        }
-                                                        res.render('dashboard_cs_right', data)
-                                                    } else if (respart1[0].status == 0 && respart2[0].status == 0) {
-                                                        data = {
-                                                            line1,
-                                                            part1,
-                                                            line2,
-                                                            part2,
-                                                            idline1: respart1[0].id_lane,
-                                                            idline2: respart2[0].id_lane,
-                                                            totalk1: resk1[0].total || 0,
-                                                            targetk1: resk1[0].target || 0,
-                                                            perck1: (resk1[0].total/resk1[0].target*100 || 0).toFixed(1),
-                                                            avak1: (resk1new[0].ava || 0).toFixed(2),
-                                                            quak1: (resk1new[0].qua || 0).toFixed(2),
-                                                            totaltake: restake[0].total || 0,
-                                                            targettake: restake[0].target || 0,
-                                                            perctake: (restake[0].total/restake[0].target*100 || 0).toFixed(1), 
-                                                            statk1: resstat1[0].status,
-                                                            stattake: resstat2[0].status,                                    
-                                                            avatake: (restakenew[0].ava || 0).toFixed(2),
-                                                            quatake: (restakenew[0].qua || 0).toFixed(2),
-                                                            probk1: probk1,
-                                                            probtake: probtake,
-                                                            shift: shift,
-                                                            resdthour1,
-                                                            resdthour2
-                                                        }
-                                                        res.render('dashboard_cs_both', data)
+                                                    data = {
+                                                        line1,
+                                                        part1,
+                                                        line2,
+                                                        part2,
+                                                        statuscs1: respart1[0].status,
+                                                        statuscs2: respart2[0].status,
+                                                        idline1: respart1[0].id_lane,
+                                                        idline2: respart2[0].id_lane,
+                                                        totalk1: resk1[0].total || 0,
+                                                        targetk1: resk1[0].target || 0,
+                                                        perck1: (resk1[0].total/resk1[0].target*100 || 0).toFixed(1),
+                                                        avak1: (resk1new[0].ava || 0).toFixed(2),
+                                                        quak1: (resk1new[0].qua || 0).toFixed(2),
+                                                        totaltake: restake[0].total || 0,
+                                                        targettake: restake[0].target || 0,
+                                                        perctake: (restake[0].total/restake[0].target*100 || 0).toFixed(1), 
+                                                        statk1: resstat1[0].status,
+                                                        stattake: resstat2[0].status,                                    
+                                                        avatake: (restakenew[0].ava || 0).toFixed(2),
+                                                        quatake: (restakenew[0].qua || 0).toFixed(2),
+                                                        probk1: probk1,
+                                                        probtake: probtake,
+                                                        shift: shift,
+                                                        resdthour1,
+                                                        resdthour2
                                                     }
+                                                    res.render('dashboard', data)
                                                 })
                                             })                              
                                         })
