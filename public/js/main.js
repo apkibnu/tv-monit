@@ -1,5 +1,5 @@
 const socket = io()
-socket.emit('update-value', part1, line1, part2, line2)
+socket.emit('update-value', line1, line2)
 let refresh = setInterval(() => {
     location.reload()
 }, 1800 * 1000);
@@ -51,7 +51,7 @@ socket.on('update-dt-hourly2', (jam, dt, shift) => {
     }
 })
 
-socket.on('update-performance',(totalk1,targetk1,perck1,totaltake,targettake,perctake)=> {
+socket.on('update-performance', (totalk1, targetk1, perck1, totaltake, targettake, perctake) => {
     let percleft = document.getElementById('perck1')
     let totalleft = document.getElementById('totalk1')
     let targetleft = document.getElementById('targetk1')
@@ -75,13 +75,13 @@ socket.on('update-performance',(totalk1,targetk1,perck1,totaltake,targettake,per
         } else {
             document.getElementById('perctake').className = "font-jumlah"
         }
-        
+
         document.getElementById('perctake').innerHTML = perctake || 0
         document.getElementById('totaltake').innerHTML = totaltake || 0
         document.getElementById('targettake').innerHTML = targettake || 0
     }
 })
-socket.on('update-status',(statusk1,statustake,problemk1,problemtake)=> {
+socket.on('update-status', (statusk1, statustake, problemk1, problemtake) => {
     let statusleft = document.getElementById('statusk1')
     let problemleft = document.getElementById('problemk1')
     let problemdescleft = document.getElementById('problemdesck1')
@@ -127,24 +127,31 @@ socket.on('update-status',(statusk1,statustake,problemk1,problemtake)=> {
             document.getElementById('statustake').className = 'col-6 bg-warning border'
             document.getElementById('problemtake').className = 'col-4 bg-warning d-flex align-items-center justify-content-center text-light'
             document.getElementById('problemdesctake').innerHTML = problemtake.toUpperCase()
-        } 
-    }   
+        }
+    }
 })
 
-socket.on('update-available',(avak1,quak1,avatake,quatake)=> {
+socket.on('update-available', (avak1, quak1, avatake, quatake) => {
     let avaleft = document.getElementById('avak1')
     let qualeft = document.getElementById('quak1')
     let avaright = document.getElementById('avatake')
     let quaright = document.getElementById('quatake')
     if (avaleft && qualeft) {
-        document.getElementById('avak1').innerHTML = avak1.toFixed(2)*100+ "%" || 0 + "%"
-        document.getElementById('avak1').style.width = avak1.toFixed(2)*100+ "%" || 0 + "%"
-        document.getElementById('quak1').innerHTML = quak1.toFixed(2)*100+ "%" || 0 + "%"
-        document.getElementById('quak1').style.width = quak1.toFixed(2)*100+ "%" || 0 + "%"
+        document.getElementById('avak1').innerHTML = avak1.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('avak1').style.width = avak1.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('quak1').innerHTML = quak1.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('quak1').style.width = quak1.toFixed(2) * 100 + "%" || 0 + "%"
     } if (avaright && quaright) {
-        document.getElementById('avatake').innerHTML = avatake.toFixed(2)*100+ "%" || 0 + "%"
-        document.getElementById('avatake').style.width = avatake.toFixed(2)*100+ "%" || 0 + "%"
-        document.getElementById('quatake').innerHTML = quatake.toFixed(2)*100+ "%" || 0 + "%"
-        document.getElementById('quatake').style.width = quatake.toFixed(2)*100+ "%" || 0 + "%"
+        document.getElementById('avatake').innerHTML = avatake.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('avatake').style.width = avatake.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('quatake').innerHTML = quatake.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('quatake').style.width = quatake.toFixed(2) * 100 + "%" || 0 + "%"
     }
+})
+
+socket.on('update-line', (part1, id1, part2, id2) => {
+    document.getElementById('part1').innerHTML = part1
+    document.getElementById('id1').innerHTML = id1
+    document.getElementById('part2').innerHTML = part2
+    document.getElementById('id2').getElementById = id2
 })
