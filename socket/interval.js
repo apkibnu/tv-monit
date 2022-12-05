@@ -55,12 +55,24 @@ exports.interval = (socket) => {
             if (hasil.resprobtake.length == 0) { probtake = '' } else { probtake = hasil.resprobtake[0].problem }
             stattake = hasil.resstat2[0].status
             statk1 = hasil.resstat1[0].status
-            let perck1 = (hasil.resk1[0].total / hasil.resk1[0].target * 100 || 0).toFixed(1)
-            let perctake = (hasil.restake[0].total / hasil.restake[0].target * 100 || 0).toFixed(1)
+            let perck1 = (hasil.resk1[0].total / hasil.resk1[0].target * 100 || 0)
+            if (perck1 === Infinity) {
+                perck1 = 100
+            } else if (perck1 > 100) {
+                perck1 = 100
+            } 
+
+            let perctake = (hasil.restake[0].total / hasil.restake[0].target * 100 || 0)
+            if (perctake === Infinity) {
+                perctake = 100
+            } else if (perctake > 100) {
+                perctake = 100
+            } 
+
             socket.emit('update-line', part1, id_lane1, part2, id_lane2)
-            socket.emit('update-performance', hasil.resk1[0].total, hasil.resk1[0].target, perck1, hasil.restake[0].total, hasil.restake[0].target, perctake)
+            socket.emit('update-performance', hasil.resk1[0].total, hasil.resk1[0].target, perck1.toFixed(), hasil.restake[0].total, hasil.restake[0].target, perctake.toFixed())
             socket.emit('update-status', statk1, stattake, probk1, probtake)
-            socket.emit('update-available', hasil.resk1new[0].ava || 0, hasil.resk1new[0].qua || 0, hasil.restakenew[0].ava || 0, hasil.restakenew[0].qua || 0)
+            socket.emit('update-available', (hasil.resk1new[0].ava * 100).toFixed() || 0, (hasil.resk1new[0].qua * 100).toFixed() || 0, (hasil.restakenew[0].ava * 100).toFixed() || 0, (hasil.restakenew[0].qua * 100).toFixed() || 0)
             for (let i = 0; i < hasil.resdthour1.length; i++) {
                 socket.emit('update-dt-hourly1', hasil.resdthour1[i].jam, hasil.resdthour1[i].dt, updateshift())
             }

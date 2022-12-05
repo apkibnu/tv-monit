@@ -1,6 +1,6 @@
 const socket = io()
 socket.emit('update-value', line1, line2)
-let refresh = setInterval(() => {
+let refresh = setTimeout(() => {
     location.reload()
 }, 1800 * 1000);
 
@@ -137,15 +137,15 @@ socket.on('update-available', (avak1, quak1, avatake, quatake) => {
     let avaright = document.getElementById('avatake')
     let quaright = document.getElementById('quatake')
     if (avaleft && qualeft) {
-        document.getElementById('avak1').innerHTML = avak1.toFixed(2) * 100 + "%" || 0 + "%"
-        document.getElementById('avak1').style.width = avak1.toFixed(2) * 100 + "%" || 0 + "%"
-        document.getElementById('quak1').innerHTML = quak1.toFixed(2) * 100 + "%" || 0 + "%"
-        document.getElementById('quak1').style.width = quak1.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('avak1').innerHTML = avak1 + "%" || 0 + "%"
+        document.getElementById('avak1').style.width = avak1 + "%" || 0 + "%"
+        document.getElementById('quak1').innerHTML = quak1 + "%" || 0 + "%"
+        document.getElementById('quak1').style.width = quak1 + "%" || 0 + "%"
     } if (avaright && quaright) {
-        document.getElementById('avatake').innerHTML = avatake.toFixed(2) * 100 + "%" || 0 + "%"
-        document.getElementById('avatake').style.width = avatake.toFixed(2) * 100 + "%" || 0 + "%"
-        document.getElementById('quatake').innerHTML = quatake.toFixed(2) * 100 + "%" || 0 + "%"
-        document.getElementById('quatake').style.width = quatake.toFixed(2) * 100 + "%" || 0 + "%"
+        document.getElementById('avatake').innerHTML = avatake + "%" || 0 + "%"
+        document.getElementById('avatake').style.width = avatake + "%" || 0 + "%"
+        document.getElementById('quatake').innerHTML = quatake + "%" || 0 + "%"
+        document.getElementById('quatake').style.width = quatake + "%" || 0 + "%"
     }
 })
 

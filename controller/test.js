@@ -1,3 +1,5 @@
+const { data } = require('jquery');
+
 const conLocal = require('../config/db').conLocalP
 const conTicket = require('../config/db').conTicketP
 const updateshift = require('../config/shift').updateshift
@@ -58,19 +60,15 @@ exports.dashboard = async (req, res) => {
     if (hasil.resprobk1.length == 0) { probk1 = '' } else { probk1 = hasil.resprobk1[0].problem }
     if (hasil.resprobtake.length == 0) { probtake = '' } else { probtake = hasil.resprobtake[0].problem }
 
-    let perck1 = (hasil.resk1[0].total / hasil.resk1[0].target * 100 || 0)
-        if (perck1 === Infinity) {
-            perck1 = 100
-        } else if (perck1 > 100) {
-            perck1 = 100
-        } 
-
-    let perctake = (hasil.restake[0].total / hasil.restake[0].target * 100 || 0)
-        if (perctake === Infinity) {
-            perctake = 100
-        } else if (perctake > 100) {
-            perctake = 100
-        } 
+    let persentasimentah = (hasil.resk1[0].total / hasil.resk1[0].target * 100 || 0).toFixed();
+    
+    if(persentasimentah > 100 ){
+         persenan = 100;
+    } else if (persentasimentah == Infinity){
+         persenan = 0;
+    } else {
+         persenan = (hasil.resk1[0].total / hasil.resk1[0].target * 100 || 0).toFixed();
+    }
 
     data = {
         line1,
@@ -83,12 +81,12 @@ exports.dashboard = async (req, res) => {
         idline2: id_lane2,
         totalk1: hasil.resk1[0].total || 0,
         targetk1: hasil.resk1[0].target || 0,
-        perck1: perck1.toFixed(),
+        perck1: persenan,
         avak1: (hasil.resk1new[0].ava || 0).toFixed(2),
         quak1: (hasil.resk1new[0].qua || 0).toFixed(2),
         totaltake: hasil.restake[0].total || 0,
         targettake: hasil.restake[0].target || 0,
-        perctake: perctake.toFixed(),
+        perctake: (hasil.restake[0].total / hasil.restake[0].target * 100 || 0).toFixed(),
         statk1: hasil.resstat1[0].status,
         stattake: hasil.resstat2[0].status,
         avatake: (hasil.restakenew[0].ava || 0).toFixed(2),
