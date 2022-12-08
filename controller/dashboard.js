@@ -58,6 +58,15 @@ exports.dashboard = async (req, res) => {
     if (hasil.resprobk1.length == 0) { probk1 = '' } else { probk1 = hasil.resprobk1[0].problem }
     if (hasil.resprobtake.length == 0) { probtake = '' } else { probtake = hasil.resprobtake[0].problem }
 
+    if (!hasil.resk1new[0].ava){
+        id_lane1 = 'BELUM PREPARATION!'
+        part1 = 'SEGERA LAKUKAN PREPARATION'
+    }
+    if (!hasil.restakenew[0].ava){
+        id_lane2 = 'BELUM PREPARATION!'
+        part2 = 'SEGERA LAKUKAN PREPARATION'
+    }
+
     let perck1 = (hasil.resk1[0].total / hasil.resk1[0].target * 100 || 0)
         if (perck1 === Infinity) {
             perck1 = 100

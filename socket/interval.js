@@ -69,6 +69,15 @@ exports.interval = (socket) => {
                 perctake = 100
             } 
 
+            if (!hasil.resk1new[0].ava){
+                id_lane1 = 'BELUM PREPARATION!'
+                part1 = 'SEGERA LAKUKAN PREPARATION'
+            }
+            if (!hasil.restakenew[0].ava){
+                id_lane2 = 'BELUM PREPARATION!'
+                part2 = 'SEGERA LAKUKAN PREPARATION'
+            }
+
             socket.emit('update-line', part1, id_lane1, part2, id_lane2)
             socket.emit('update-performance', hasil.resk1[0].total, hasil.resk1[0].target, perck1.toFixed(), hasil.restake[0].total, hasil.restake[0].target, perctake.toFixed())
             socket.emit('update-status', statk1, stattake, probk1, probtake)

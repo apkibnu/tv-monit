@@ -153,5 +153,5 @@ socket.on('update-line', (part1, id1, part2, id2) => {
     document.getElementById('part1').innerHTML = part1
     document.getElementById('id1').innerHTML = id1
     document.getElementById('part2').innerHTML = part2
-    document.getElementById('id2').getElementById = id2
+    document.getElementById('id2').innerHTML = id2
 })
